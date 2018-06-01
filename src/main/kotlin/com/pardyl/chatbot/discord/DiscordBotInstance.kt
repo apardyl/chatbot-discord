@@ -10,8 +10,11 @@ import com.pardyl.chatbot.discord.entities.DiscordServer
 import net.dv8tion.jda.core.AccountType
 import net.dv8tion.jda.core.JDA
 import net.dv8tion.jda.core.JDABuilder
+import java.io.InputStream
+import java.util.*
 
-class DiscordBotInstance(configuration: BotConfiguration, val token: String) : BotInstance(configuration) {
+class DiscordBotInstance(configuration: BotConfiguration, private val token: String, private val properties: Properties)
+    : BotInstance(configuration) {
     private var api: JDA? = null
 
     override fun run() {
@@ -22,11 +25,29 @@ class DiscordBotInstance(configuration: BotConfiguration, val token: String) : B
         process(OnReadyEvent())
     }
 
+    override fun shutdown() {
+        api!!.shutdown()
+    }
+
     override fun getServers(): List<Server> {
         return api!!.guilds.map { guild -> DiscordServer(guild) }
     }
 
+    override fun getServerForName(name: String?): Server {
+        return DiscordServer(api!!.getGuildsByName(name, true).elementAtOrNull(0)!!)
+    }
+
+    override fun getServerForId(id: String?): Server {
+        return DiscordServer(api!!.getGuildById(id))
+    }
+
     override fun getMessageFactory(): MessageFactory {
         return DiscordMessageFactory()
+    }
+
+    override fun runAdminTask(taskName: String?): InputStream {
+        val command = (properties[taskName] ?: throw UnsupportedOperationException(taskName)) as String
+        val proc = Runtime.getRuntime().exec(command)
+        return proc.inputStream
     }
 }

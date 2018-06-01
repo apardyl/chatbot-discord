@@ -25,4 +25,20 @@ class DiscordMessage(val discordMessage: net.dv8tion.jda.core.entities.Message) 
     override fun getMentionedRoles(): List<Role>? {
         return discordMessage.mentionedRoles.map { role -> DiscordRole(role) }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as DiscordMessage
+
+        if (discordMessage != other.discordMessage) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return discordMessage.hashCode()
+    }
+
 }

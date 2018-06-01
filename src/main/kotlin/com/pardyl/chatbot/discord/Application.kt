@@ -19,7 +19,7 @@ class Application {
             val loader = URLClassLoader(arrayOf(url))
             val confClass = Class.forName(properties["CONFIG_CLASS"] as String, true, loader)
             val config = confClass.getConstructor().newInstance() as BotConfiguration
-            val bot = DiscordBotInstance(config, properties["TOKEN"] as String)
+            val bot = DiscordBotInstance(config, properties["TOKEN"] as String, properties)
             bot.run()
         }
     }
