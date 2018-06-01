@@ -48,7 +48,7 @@ class DiscordServer(private val guild: Guild) : Server() {
     }
 
     override fun getUserForId(id: String?): User {
-        return DiscordUser(guild.getMemberById(name).user)
+        return DiscordUser(guild.getMemberById(id).user)
     }
 
     override fun getReactionForName(name: String?): Reaction {
