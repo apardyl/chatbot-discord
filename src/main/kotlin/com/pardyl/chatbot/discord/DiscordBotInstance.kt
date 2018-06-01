@@ -27,6 +27,7 @@ class DiscordBotInstance(configuration: BotConfiguration, private val token: Str
 
     override fun shutdown() {
         api!!.shutdown()
+        System.exit(0)
     }
 
     override fun getServers(): List<Server> {
