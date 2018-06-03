@@ -47,8 +47,8 @@ class DiscordBotInstance(configuration: BotConfiguration, private val token: Str
     }
 
     override fun runAdminTask(taskName: String?): InputStream {
-        val command = (properties[taskName] ?: throw UnsupportedOperationException(taskName)) as String
-        val proc = Runtime.getRuntime().exec("TASK-$command")
+        val command = (properties["TASK-$taskName"] ?: throw UnsupportedOperationException(taskName)) as String
+        val proc = Runtime.getRuntime().exec(command)
         return proc.inputStream
     }
 }
