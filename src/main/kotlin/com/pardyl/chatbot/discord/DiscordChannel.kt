@@ -54,7 +54,7 @@ internal class DiscordChannel(private val channel: MessageChannel) : Channel() {
     }
 
     override fun sendIsTyping(bot: BotInstance?) {
-        channel.sendTyping()
+        channel.sendTyping().complete()
     }
 
     override fun equals(other: Any?): Boolean {
