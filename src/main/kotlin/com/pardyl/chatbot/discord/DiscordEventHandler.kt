@@ -1,8 +1,10 @@
 package com.pardyl.chatbot.discord
 
 import com.pardyl.chatbot.core.events.OnMessageEvent
+import com.pardyl.chatbot.core.events.OnMessageRemovedEvent
 import com.pardyl.chatbot.core.events.OnReactionAddedEvent
 import net.dv8tion.jda.core.events.ReadyEvent
+import net.dv8tion.jda.core.events.message.MessageDeleteEvent
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent
 import net.dv8tion.jda.core.hooks.ListenerAdapter
@@ -30,5 +32,9 @@ internal class DiscordEventHandler(private val bot: DiscordBotInstance) : Listen
                     DiscordReaction(event.reaction.reactionEmote.emote)))
         }
         // TODO: handle unicode reactions
+    }
+
+    override fun onMessageDelete(event: MessageDeleteEvent?) {
+        bot.process(OnMessageRemovedEvent(DiscordChannel(event!!.channel), event.messageId))
     }
 }

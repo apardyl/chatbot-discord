@@ -53,6 +53,10 @@ internal class DiscordChannel(private val channel: MessageChannel) : Channel() {
         }
     }
 
+    override fun sendIsTyping(bot: BotInstance?) {
+        channel.sendTyping()
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -67,5 +71,4 @@ internal class DiscordChannel(private val channel: MessageChannel) : Channel() {
     override fun hashCode(): Int {
         return channel.hashCode()
     }
-
 }
