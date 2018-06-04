@@ -1,11 +1,11 @@
-package com.pardyl.chatbot.discord.entities
+package com.pardyl.chatbot.discord
 
 import com.pardyl.chatbot.core.entities.Channel
 import com.pardyl.chatbot.core.entities.Message
 import com.pardyl.chatbot.core.entities.Role
 import com.pardyl.chatbot.core.entities.User
 
-class DiscordMessage(val discordMessage: net.dv8tion.jda.core.entities.Message) : Message {
+internal class DiscordMessage(val discordMessage: net.dv8tion.jda.core.entities.Message) : Message {
     override fun getChannel(): Channel {
         return DiscordChannel(discordMessage.channel)
     }

@@ -1,9 +1,9 @@
-package com.pardyl.chatbot.discord.entities
+package com.pardyl.chatbot.discord
 
 import com.pardyl.chatbot.core.entities.*
 import net.dv8tion.jda.core.MessageBuilder
 
-class DiscordMessageFactory : MessageFactory {
+internal class DiscordMessageFactory : MessageFactory {
     private val msgBuilder: MessageBuilder = MessageBuilder()
 
     override fun appendText(text: String?): MessageFactory {

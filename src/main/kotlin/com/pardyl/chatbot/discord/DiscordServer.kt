@@ -1,11 +1,11 @@
-package com.pardyl.chatbot.discord.entities
+package com.pardyl.chatbot.discord
 
 import com.pardyl.chatbot.core.BotInstance
 import com.pardyl.chatbot.core.entities.*
 import net.dv8tion.jda.core.entities.Guild
 import net.dv8tion.jda.core.managers.GuildController
 
-class DiscordServer(private val guild: Guild) : Server() {
+internal class DiscordServer(private val guild: Guild) : Server() {
     override fun getName(): String {
         return guild.name
     }

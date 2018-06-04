@@ -5,15 +5,15 @@ import com.pardyl.chatbot.core.BotInstance
 import com.pardyl.chatbot.core.events.OnReadyEvent
 import com.pardyl.chatbot.core.entities.MessageFactory
 import com.pardyl.chatbot.core.entities.Server
-import com.pardyl.chatbot.discord.entities.DiscordMessageFactory
-import com.pardyl.chatbot.discord.entities.DiscordServer
 import net.dv8tion.jda.core.AccountType
 import net.dv8tion.jda.core.JDA
 import net.dv8tion.jda.core.JDABuilder
 import java.io.InputStream
 import java.util.*
 
-class DiscordBotInstance(configuration: BotConfiguration, private val token: String, private val properties: Properties)
+internal class DiscordBotInstance(configuration: BotConfiguration,
+                                  private val token: String,
+                                  private val properties: Properties)
     : BotInstance(configuration) {
     private var api: JDA? = null
 

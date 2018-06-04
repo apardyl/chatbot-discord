@@ -1,4 +1,4 @@
-package com.pardyl.chatbot.discord.entities
+package com.pardyl.chatbot.discord
 
 import com.pardyl.chatbot.core.BotInstance
 import com.pardyl.chatbot.core.entities.*
@@ -6,7 +6,7 @@ import net.dv8tion.jda.core.entities.MessageChannel
 import net.dv8tion.jda.core.entities.TextChannel
 import java.io.File
 
-class DiscordChannel(private val channel: MessageChannel) : Channel() {
+internal class DiscordChannel(private val channel: MessageChannel) : Channel() {
     override fun getName(): String {
         return channel.name
     }

@@ -2,14 +2,12 @@ package com.pardyl.chatbot.discord
 
 import com.pardyl.chatbot.core.events.OnMessageEvent
 import com.pardyl.chatbot.core.events.OnReactionAddedEvent
-import com.pardyl.chatbot.discord.entities.DiscordMessage
-import com.pardyl.chatbot.discord.entities.DiscordReaction
 import net.dv8tion.jda.core.events.ReadyEvent
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent
 import net.dv8tion.jda.core.hooks.ListenerAdapter
 
-class DiscordEventHandler(private val bot: DiscordBotInstance) : ListenerAdapter() {
+internal class DiscordEventHandler(private val bot: DiscordBotInstance) : ListenerAdapter() {
     override fun onReady(event: ReadyEvent?) {
         // Do not call API at this point!
     }
