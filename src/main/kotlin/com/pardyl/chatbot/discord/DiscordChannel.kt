@@ -5,6 +5,7 @@ import com.pardyl.chatbot.core.entities.*
 import net.dv8tion.jda.core.entities.MessageChannel
 import net.dv8tion.jda.core.entities.TextChannel
 import java.io.File
+import java.io.InputStream
 
 internal class DiscordChannel(private val channel: MessageChannel) : Channel() {
     override fun getName(): String {
@@ -45,9 +46,17 @@ internal class DiscordChannel(private val channel: MessageChannel) : Channel() {
         }
     }
 
-    override fun sendFile(file: File?, uploadName: String?, message: Message?) {
+    override fun sendFile(file: File?, uploadName: String?, message: Message?, bot: BotInstance?) {
         if (message == null || message is DiscordMessage) {
             channel.sendFile(file, uploadName, (message as DiscordMessage?)?.discordMessage).complete()
+        } else {
+            throw IllegalArgumentException("Not a discord message")
+        }
+    }
+
+    override fun sendFile(data: InputStream?, uploadName: String?, message: Message?, bot: BotInstance?) {
+        if (message == null || message is DiscordMessage) {
+            channel.sendFile(data, uploadName, (message as DiscordMessage?)?.discordMessage).complete()
         } else {
             throw IllegalArgumentException("Not a discord message")
         }
