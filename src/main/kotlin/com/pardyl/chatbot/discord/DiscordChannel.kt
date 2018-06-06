@@ -47,7 +47,7 @@ internal class DiscordChannel(private val channel: MessageChannel) : Channel() {
 
     override fun sendFile(file: File?, uploadName: String?, message: Message?) {
         if (message is DiscordMessage) {
-            channel.sendFile(file, uploadName, message.discordMessage)
+            channel.sendFile(file, uploadName, message.discordMessage).complete()
         } else {
             throw IllegalArgumentException("Not a discord message")
         }
