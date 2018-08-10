@@ -26,6 +26,10 @@ internal class DiscordMessage(val discordMessage: net.dv8tion.jda.core.entities.
         return discordMessage.mentionedRoles.map { role -> DiscordRole(role) }
     }
 
+    override fun getMentionedChannels(): List<Channel> {
+        return discordMessage.mentionedChannels.map { channel -> DiscordChannel(channel) }
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
