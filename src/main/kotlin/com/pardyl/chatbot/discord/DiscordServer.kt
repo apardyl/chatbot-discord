@@ -34,42 +34,42 @@ internal class DiscordServer(private val guild: Guild) : Server() {
     override fun kickUser(user: User?, bot: BotInstance?) {
         if (user is DiscordUser) {
             val manager = GuildController(guild)
-            manager.kick(user.id)
+            manager.kick(user.id).complete()
         } else {
             throw IllegalArgumentException("Not a discord user")
         }
     }
 
-    override fun getReactionForId(id: String?): Reaction {
-        return DiscordReaction(guild.getEmoteById(id))
+    override fun getReactionForId(id: String?): Reaction? {
+        return guild.getEmoteById(id)?.let { DiscordReaction(it) }
     }
 
-    override fun getRoleForName(name: String?): Role {
-        return DiscordRole(guild.getRolesByName(name, false).elementAtOrNull(0)!!)
+    override fun getRoleForName(name: String?): Role? {
+        return guild.getRolesByName(name, false).elementAtOrNull(0)?.let { DiscordRole(it) }
     }
 
-    override fun getChannelForName(name: String?): Channel {
-        return DiscordChannel(guild.getTextChannelsByName(name, false).elementAtOrNull(0)!!)
+    override fun getChannelForName(name: String?): Channel? {
+        return guild.getTextChannelsByName(name, false).elementAtOrNull(0)?.let { DiscordChannel(it) }
     }
 
-    override fun getUserForId(id: String?): User {
-        return DiscordUser(guild.getMemberById(id).user)
+    override fun getUserForId(id: String?): User? {
+        return guild.getMemberById(id).user?.let { DiscordUser(it) }
     }
 
-    override fun getReactionForName(name: String?): Reaction {
-        return DiscordReaction(guild.getEmotesByName(name, false).elementAtOrNull(0)!!)
+    override fun getReactionForName(name: String?): Reaction? {
+        return guild.getEmotesByName(name, false).elementAtOrNull(0)?.let { DiscordReaction(it) }
     }
 
-    override fun getRoleForId(id: String?): Role {
-        return DiscordRole(guild.getRoleById(id))
+    override fun getRoleForId(id: String?): Role? {
+        return guild.getRoleById(id)?.let { DiscordRole(it) }
     }
 
-    override fun getUserForName(name: String?): User {
-        return DiscordUser(guild.getMembersByName(name, false).getOrNull(0)!!.user)
+    override fun getUserForName(name: String?): User? {
+        return guild.getMembersByName(name, false).getOrNull(0)?.user?.let { DiscordUser(it) }
     }
 
-    override fun getChannelForId(id: String?): Channel {
-        return DiscordChannel(guild.getTextChannelById(id))
+    override fun getChannelForId(id: String?): Channel? {
+        return guild.getTextChannelById(id)?.let { DiscordChannel(it) }
     }
 
     override fun banUser(user: User?, bot: BotInstance?) {
@@ -88,20 +88,22 @@ internal class DiscordServer(private val guild: Guild) : Server() {
     }
 
     override fun isUserOnline(user: User?): Boolean {
-        if (user is DiscordUser) {
-            val onlineStatus = listOf(OnlineStatus.ONLINE, OnlineStatus.DO_NOT_DISTURB,
-                    OnlineStatus.IDLE, OnlineStatus.INVISIBLE)
-            return onlineStatus.contains(guild.getMemberById(user.id).onlineStatus)
-        } else {
-            throw IllegalArgumentException("Not a discord user")
+        return when (user) {
+            null -> false
+            is DiscordUser -> {
+                val onlineStatus = listOf(OnlineStatus.ONLINE, OnlineStatus.DO_NOT_DISTURB,
+                        OnlineStatus.IDLE, OnlineStatus.INVISIBLE)
+                onlineStatus.contains(guild.getMemberById(user.id).onlineStatus)
+            }
+            else -> throw IllegalArgumentException("Not a discord user")
         }
     }
 
     override fun getRolesForUser(user: User?): List<Role> {
-        if (user is DiscordUser) {
-            return guild.getMemberById(user.id).roles.map { role -> DiscordRole(role) }
-        } else {
-            throw IllegalArgumentException("Not a discord user")
+        return when (user) {
+            null -> listOf()
+            is DiscordUser -> guild.getMemberById(user.id).roles.map { role -> DiscordRole(role) }
+            else -> throw IllegalArgumentException("Not a discord user")
         }
     }
 
@@ -113,7 +115,9 @@ internal class DiscordServer(private val guild: Guild) : Server() {
     }
 
     override fun hasRole(user: User?, role: Role?): Boolean {
-        return if (role !is DiscordRole) {
+        return if (user == null || role == null) {
+            false
+        } else if (role !is DiscordRole) {
             throw IllegalArgumentException("Not a discord role")
         } else {
             when (user) {
