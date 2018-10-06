@@ -89,14 +89,6 @@ internal class DiscordChannel(private val channel: MessageChannel) : Channel() {
         }
     }
 
-    override fun addReaction(message: Message?, reaction: Reaction?, bot: BotInstance?) {
-        if (reaction is DiscordReaction && message is DiscordMessage) {
-            message.discordMessage.addReaction(reaction.discordReaction).complete()
-        } else {
-            throw IllegalArgumentException("Not a discord message or not a discord reaction")
-        }
-    }
-
     override fun sendFile(file: File?, uploadName: String?, message: Message?, bot: BotInstance?) {
         if (message == null || message is DiscordMessage) {
             channel.sendFile(file, uploadName, (message as DiscordMessage?)?.discordMessage).complete()

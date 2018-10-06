@@ -21,7 +21,7 @@ internal class DiscordBotInstance(configuration: BotConfiguration,
         val builder = JDABuilder(AccountType.BOT)
         builder.setToken(token)
         builder.addEventListener(DiscordEventHandler(this))
-        api = builder.buildBlocking()
+        api = builder.build().awaitReady()
         process(OnReadyEvent())
     }
 

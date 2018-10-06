@@ -1,9 +1,7 @@
 package com.pardyl.chatbot.discord
 
-import com.pardyl.chatbot.core.entities.Channel
-import com.pardyl.chatbot.core.entities.Message
-import com.pardyl.chatbot.core.entities.Role
-import com.pardyl.chatbot.core.entities.User
+import com.pardyl.chatbot.core.BotInstance
+import com.pardyl.chatbot.core.entities.*
 
 internal class DiscordMessage(val discordMessage: net.dv8tion.jda.core.entities.Message) : Message {
     override fun getChannel(): Channel {
@@ -45,4 +43,23 @@ internal class DiscordMessage(val discordMessage: net.dv8tion.jda.core.entities.
         return discordMessage.hashCode()
     }
 
+    override fun addReaction(reaction: Reaction?, bot: BotInstance?) {
+        when (reaction) {
+            is DiscordReaction -> discordMessage.addReaction(reaction.discordReaction).complete()
+            is UnicodeReaction -> discordMessage.addReaction(reaction.name)
+            else -> throw IllegalArgumentException("Not a discord message or not a discord reaction")
+        }
+    }
+
+    override fun unpin(bot: BotInstance?) {
+        discordMessage.unpin().complete()
+    }
+
+    override fun pin(bot: BotInstance?) {
+        discordMessage.pin().complete()
+    }
+
+    override fun delete(bot: BotInstance?) {
+        discordMessage.delete().complete()
+    }
 }
