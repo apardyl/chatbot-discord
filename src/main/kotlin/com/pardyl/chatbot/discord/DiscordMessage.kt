@@ -5,7 +5,7 @@ import com.pardyl.chatbot.core.entities.Message
 import com.pardyl.chatbot.core.entities.Role
 import com.pardyl.chatbot.core.entities.User
 
-internal class DiscordMessage(val discordMessage: net.dv8tion.jda.core.entities.Message) : Message {
+internal class DiscordMessage(val discordMessage: net.dv8tion.jda.api.entities.Message) : Message {
     override fun getChannel(): Channel {
         return DiscordChannel(discordMessage.channel)
     }

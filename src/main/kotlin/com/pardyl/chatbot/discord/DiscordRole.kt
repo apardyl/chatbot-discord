@@ -2,7 +2,7 @@ package com.pardyl.chatbot.discord
 
 import com.pardyl.chatbot.core.entities.Role
 
-internal class DiscordRole(val discordRole: net.dv8tion.jda.core.entities.Role) : Role {
+internal class DiscordRole(val discordRole: net.dv8tion.jda.api.entities.Role) : Role {
     override fun getName(): String {
         return discordRole.name
     }

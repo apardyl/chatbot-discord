@@ -1,7 +1,7 @@
 package com.pardyl.chatbot.discord
 
 import com.pardyl.chatbot.core.entities.Reaction
-import net.dv8tion.jda.core.entities.Emote
+import net.dv8tion.jda.api.entities.Emote
 
 internal class DiscordReaction(val discordReaction: Emote) : Reaction {
     override fun getName(): String {

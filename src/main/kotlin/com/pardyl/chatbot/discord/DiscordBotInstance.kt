@@ -5,11 +5,11 @@ import com.pardyl.chatbot.core.BotInstance
 import com.pardyl.chatbot.core.events.OnReadyEvent
 import com.pardyl.chatbot.core.entities.MessageFactory
 import com.pardyl.chatbot.core.entities.Server
-import net.dv8tion.jda.core.AccountType
-import net.dv8tion.jda.core.JDA
-import net.dv8tion.jda.core.JDABuilder
+import net.dv8tion.jda.api.JDA
+import net.dv8tion.jda.api.JDABuilder
 import java.io.InputStream
 import java.util.*
+import kotlin.system.exitProcess
 
 internal class DiscordBotInstance(configuration: BotConfiguration,
                                   private val token: String,
@@ -18,28 +18,27 @@ internal class DiscordBotInstance(configuration: BotConfiguration,
     private var api: JDA? = null
 
     override fun run() {
-        val builder = JDABuilder(AccountType.BOT)
-        builder.setToken(token)
-        builder.addEventListener(DiscordEventHandler(this))
-        api = builder.buildBlocking()
+        val builder = JDABuilder.createDefault(token)
+        builder.addEventListeners(DiscordEventHandler(this))
+        api = builder.build().awaitReady()
         process(OnReadyEvent())
     }
 
     override fun shutdown() {
         api!!.shutdown()
-        System.exit(0)
+        exitProcess(0)
     }
 
     override fun getServers(): List<Server> {
         return api!!.guilds.map { guild -> DiscordServer(guild) }
     }
 
-    override fun getServerForName(name: String?): Server {
+    override fun getServerForName(name: String): Server {
         return DiscordServer(api!!.getGuildsByName(name, true).elementAtOrNull(0)!!)
     }
 
-    override fun getServerForId(id: String?): Server {
-        return DiscordServer(api!!.getGuildById(id))
+    override fun getServerForId(id: String): Server {
+        return DiscordServer(api!!.getGuildById(id)!!)
     }
 
     override fun getMessageFactory(): MessageFactory {

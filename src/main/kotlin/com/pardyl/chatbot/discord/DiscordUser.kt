@@ -3,7 +3,7 @@ package com.pardyl.chatbot.discord
 import com.pardyl.chatbot.core.entities.Channel
 import com.pardyl.chatbot.core.entities.User
 
-internal class DiscordUser(val discordUser: net.dv8tion.jda.core.entities.User)
+internal class DiscordUser(val discordUser: net.dv8tion.jda.api.entities.User)
     : User {
     override fun getName(): String {
         return discordUser.name

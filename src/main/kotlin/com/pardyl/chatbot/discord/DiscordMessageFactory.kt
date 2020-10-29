@@ -1,7 +1,7 @@
 package com.pardyl.chatbot.discord
 
 import com.pardyl.chatbot.core.entities.*
-import net.dv8tion.jda.core.MessageBuilder
+import net.dv8tion.jda.api.MessageBuilder
 
 internal class DiscordMessageFactory : MessageFactory {
     private val msgBuilder: MessageBuilder = MessageBuilder()
