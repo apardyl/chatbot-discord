@@ -26,7 +26,7 @@ internal class DiscordServer(private val guild: Guild) : Server() {
         return guild.roles.map { role -> DiscordRole(role) }
     }
 
-    override fun getReactions(): List<Reaction> {
+    override fun getEmotes(): List<Emote> {
         return guild.emotes.map { emote -> DiscordReaction(emote) }
     }
 
@@ -38,7 +38,7 @@ internal class DiscordServer(private val guild: Guild) : Server() {
         }
     }
 
-    override fun getReactionForId(id: String): Reaction {
+    override fun getEmoteForId(id: String): Emote {
         return DiscordReaction(guild.getEmoteById(id)!!)
     }
 
@@ -54,7 +54,7 @@ internal class DiscordServer(private val guild: Guild) : Server() {
         return DiscordUser(guild.getMemberById(id)!!.user)
     }
 
-    override fun getReactionForName(name: String): Reaction {
+    override fun getEmoteForName(name: String): Emote {
         return DiscordReaction(guild.getEmotesByName(name, false).elementAtOrNull(0)!!)
     }
 
@@ -84,21 +84,23 @@ internal class DiscordServer(private val guild: Guild) : Server() {
         } else listOf()
     }
 
-    override fun isUserOnline(user: User): Boolean {
-        if (user is DiscordUser) {
-            val onlineStatus = listOf(OnlineStatus.ONLINE, OnlineStatus.DO_NOT_DISTURB,
-                OnlineStatus.IDLE, OnlineStatus.INVISIBLE)
-            return onlineStatus.contains(guild.getMemberById(user.id)!!.onlineStatus)
-        } else {
-            throw IllegalArgumentException("Not a discord user")
+    override fun isUserOnline(user: User?): Boolean {
+        return when (user) {
+            null -> false
+            is DiscordUser -> {
+                val onlineStatus = listOf(OnlineStatus.ONLINE, OnlineStatus.DO_NOT_DISTURB,
+                    OnlineStatus.IDLE, OnlineStatus.INVISIBLE)
+                onlineStatus.contains(guild.getMemberById(user.id)!!.onlineStatus)
+            }
+            else -> throw IllegalArgumentException("Not a discord user")
         }
     }
 
-    override fun getRolesForUser(user: User): List<Role> {
-        if (user is DiscordUser) {
-            return guild.getMemberById(user.id)!!.roles.map { role -> DiscordRole(role) }
-        } else {
-            throw IllegalArgumentException("Not a discord user")
+    override fun getRolesForUser(user: User?): List<Role> {
+        return when (user) {
+            null -> listOf()
+            is DiscordUser -> guild.getMemberById(user.id)!!.roles.map { role -> DiscordRole(role) }
+            else -> throw IllegalArgumentException("Not a discord user")
         }
     }
 
@@ -109,8 +111,10 @@ internal class DiscordServer(private val guild: Guild) : Server() {
         }
     }
 
-    override fun hasRole(user: User, role: Role): Boolean {
-        return if (role !is DiscordRole) {
+    override fun hasRole(user: User?, role: Role?): Boolean {
+        return if (user == null || role == null) {
+            false
+        } else if (role !is DiscordRole) {
             throw IllegalArgumentException("Not a discord role")
         } else {
             when (user) {

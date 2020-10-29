@@ -29,7 +29,7 @@ internal class DiscordMessageFactory : MessageFactory {
         return this
     }
 
-    override fun appendReaction(reaction: Reaction?): MessageFactory {
+    override fun appendEmote(reaction: Emote?): MessageFactory {
         if (reaction is DiscordReaction) {
             msgBuilder.append(reaction.discordReaction)
         } else {

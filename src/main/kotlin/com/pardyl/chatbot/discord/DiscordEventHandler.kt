@@ -1,5 +1,6 @@
 package com.pardyl.chatbot.discord
 
+import com.pardyl.chatbot.core.entities.UnicodeEmote
 import com.pardyl.chatbot.core.events.OnMessageEvent
 import com.pardyl.chatbot.core.events.OnMessageRemovedEvent
 import com.pardyl.chatbot.core.events.OnReactionAddedEvent
@@ -28,10 +29,12 @@ internal class DiscordEventHandler(private val bot: DiscordBotInstance) : Listen
             return
         }
         if (event.reaction.reactionEmote.isEmote) {
-            bot.process(OnReactionAddedEvent(DiscordMessage(event.channel.retrieveMessageById(event.messageId).complete()),
-                DiscordReaction(event.reaction.reactionEmote.emote)))
+            bot.process(OnReactionAddedEvent(DiscordMessageReaction(DiscordMessage(event.channel.retrieveMessageById(event.messageId).complete()),
+                DiscordReaction(event.reaction.reactionEmote.emote), event.reaction.count), DiscordUser(event.user!!)))
+        } else {
+            bot.process(OnReactionAddedEvent(DiscordMessageReaction(DiscordMessage(event.channel.retrieveMessageById(event.messageId).complete()),
+                UnicodeEmote(event.reaction.reactionEmote.name), event.reaction.count), DiscordUser(event.user!!)))
         }
-        // TODO: handle unicode reactions
     }
 
     override fun onMessageDelete(event: MessageDeleteEvent) {
