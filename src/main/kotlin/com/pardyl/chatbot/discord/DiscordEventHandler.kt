@@ -28,12 +28,13 @@ internal class DiscordEventHandler(private val bot: DiscordBotInstance) : Listen
             // Ignore bots
             return
         }
+        // TODO: fix reaction count.
         if (event.reaction.reactionEmote.isEmote) {
             bot.process(OnReactionAddedEvent(DiscordMessageReaction(DiscordMessage(event.channel.retrieveMessageById(event.messageId).complete()),
-                DiscordReaction(event.reaction.reactionEmote.emote), event.reaction.count), DiscordUser(event.user!!)))
+                DiscordReaction(event.reaction.reactionEmote.emote), 1), DiscordUser(event.user!!)))
         } else {
             bot.process(OnReactionAddedEvent(DiscordMessageReaction(DiscordMessage(event.channel.retrieveMessageById(event.messageId).complete()),
-                UnicodeEmote(event.reaction.reactionEmote.name), event.reaction.count), DiscordUser(event.user!!)))
+                UnicodeEmote(event.reaction.reactionEmote.name), 1), DiscordUser(event.user!!)))
         }
     }
 
