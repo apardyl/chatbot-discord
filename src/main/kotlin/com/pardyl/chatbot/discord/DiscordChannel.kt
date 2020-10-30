@@ -90,9 +90,10 @@ internal class DiscordChannel(private val channel: MessageChannel) : Channel() {
     }
 
     override fun sendFile(file: File, uploadName: String?, message: Message?, bot: BotInstance?) {
-        val msg = message ?: DiscordMessageFactory().build()
-        if (msg is DiscordMessage) {
-            channel.sendMessage(msg.discordMessage)
+        if (message == null) {
+            channel.sendFile(file, uploadName ?: "upload").complete()
+        } else if (message is DiscordMessage) {
+            channel.sendMessage(message.discordMessage)
                 .addFile(file, uploadName ?: "upload").complete()
         } else {
             throw IllegalArgumentException("Not a discord message")
@@ -100,9 +101,10 @@ internal class DiscordChannel(private val channel: MessageChannel) : Channel() {
     }
 
     override fun sendFile(data: InputStream, uploadName: String?, message: Message?, bot: BotInstance?) {
-        val msg = message ?: DiscordMessageFactory().build()
-        if (msg is DiscordMessage) {
-            channel.sendMessage(msg.discordMessage)
+        if (message == null) {
+            channel.sendFile(data, uploadName ?: "upload").complete()
+        } else if (message is DiscordMessage) {
+            channel.sendMessage(message.discordMessage)
                 .addFile(data, uploadName ?: "upload").complete()
         } else {
             throw IllegalArgumentException("Not a discord message")
