@@ -7,6 +7,10 @@ import com.pardyl.chatbot.core.entities.MessageFactory
 import com.pardyl.chatbot.core.entities.Server
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
+import net.dv8tion.jda.api.entities.Activity
+import net.dv8tion.jda.api.requests.GatewayIntent
+import net.dv8tion.jda.api.utils.MemberCachePolicy
+import net.dv8tion.jda.api.utils.cache.CacheFlag
 import java.io.InputStream
 import java.util.*
 import kotlin.system.exitProcess
@@ -19,7 +23,12 @@ internal class DiscordBotInstance(configuration: BotConfiguration,
 
     override fun run() {
         val builder = JDABuilder.createDefault(token)
+        builder.enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_PRESENCES);
         builder.addEventListeners(DiscordEventHandler(this))
+        builder.setActivity(Activity.watching("you"))
+        builder.setMemberCachePolicy(MemberCachePolicy.ALL)
+        builder.disableCache(CacheFlag.ACTIVITY)
+        builder.setLargeThreshold(200)
         api = builder.build().awaitReady()
         process(OnReadyEvent())
     }
